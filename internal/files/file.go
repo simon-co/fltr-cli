@@ -225,7 +225,7 @@ func View(projectName string, dirname string, filename string, classname string,
 		Replacements: map[string]string{
 			"PROJECT_NAME": projectName,
       "CONTROLLER_FILE_NAME": controllerFilename,
-      "CLASS_NAME": classname
+      "CLASS_NAME": classname,
 		},
 		Mu: sync.Mutex{},
 	}
@@ -240,6 +240,66 @@ func ViewCtlr(dirname string, filename string, classname string, viewFilename st
 		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.ViewCtlr),
 		Replacements:       map[string]string{
       "VIEW_FILENAME": viewFilename,
+      "CLASS_NAME": classname,
+    },
+		Mu:                 sync.Mutex{},
+	}
+}
+
+func SettingsDialogView(projectName string) *File{
+  return &File{
+  	OutputString:       "",
+  	OutputFilename:     "d_app_settings.dart",
+  	OutputFilePath:     "",
+  	outputPathParts:    []string{"lib", "src", "dialogs", "app_settings"},
+  	EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.SettingsDialogView),
+  	Replacements:       map[string]string{
+      "PROJECT_NAME": projectName,
+    },
+  	Mu:                 sync.Mutex{},
+  }
+}
+
+
+func SettingsDialogCtlr(projectName string) *File{
+  return &File{
+  	OutputString:       "",
+  	OutputFilename:     "d_app_settings.dart",
+  	OutputFilePath:     "",
+  	outputPathParts:    []string{"lib", "src", "dialogs", "app_settings"},
+  	EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.SettingsDialogCtlr),
+  	Replacements:       map[string]string{
+      "PROJECT_NAME": projectName,
+    },
+  	Mu:                 sync.Mutex{},
+  }
+}
+
+func Dialog(projectName string, dirname string, filename string, classname string, controllerFilename string, root string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     filename,
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "views", dirname},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.DialogView),
+		Replacements: map[string]string{
+			"PROJECT_NAME": projectName,
+      "CONTROLLER_FILE_NAME": controllerFilename,
+      "CLASS_NAME": classname,
+		},
+		Mu: sync.Mutex{},
+	}
+}
+
+func DialogCtlr(dirname string, filename string, classname string, dialogFilename string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     filename,
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "views", dirname},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.DialogCtlr),
+		Replacements:       map[string]string{
+      "VIEW_FILENAME": dialogFilename,
       "CLASS_NAME": classname,
     },
 		Mu:                 sync.Mutex{},

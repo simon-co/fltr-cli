@@ -24,14 +24,14 @@ func init() {
 type newCmdRunner struct{}
 
 func (self newCmdRunner) Run(output io.Writer, workingDir string, args []string) error {
-    blueprint, err := ProjectBlueprint{}.New(workingDir)
-    if err != nil {
-        return apperr.Parse(err)
-    }
-    if err := blueprint.Instantiate(output); err != nil {
-        os.RemoveAll(blueprint.ProjectPath)
-        return apperr.Parse(err)
-    }
+	blueprint, err := ProjectBlueprint{}.New(workingDir)
+	if err != nil {
+		return apperr.Parse(err)
+	}
+	if err := blueprint.Instantiate(output); err != nil {
+		os.RemoveAll(blueprint.ProjectPath)
+		return apperr.Parse(err)
+	}
 	return nil
 }
 
@@ -56,11 +56,23 @@ func (self ProjectBlueprint) New(workingDir string) (*ProjectBlueprint, error) {
 	return &ProjectBlueprint{
 		ProjectName: projectName,
 		ProjectPath: projectPath,
-		Files:       files.FileList{files.Main(projectPath)},
+		Files:       files.FileList{
+      files.Main(projectPath),
+      files.App(projectName),
+      files.AppTheme(projectName),
+      files.AppResult(projectName),
+      files.AppError(projectName),
+      files.AppErrorG(),
+      files.RootNav(projectName),
+      files.SplashView(projectName),
+      files.SplashCtlr(),
+      files.StartView(projectName),
+      files.StartCtlr(),
+    },
 		Directories: []string{"app", "dialogs", "models", "navigation", "util",
-			"views" + string(os.PathSeparator) + "splash", "hive", "bloc",
+			"views" + string(os.PathSeparator) + "splash", "views" + string(os.PathSeparator) + "start",
 		},
-		Dependencies:    []string{"equatable", "flutter_bloc", "json_annotation", "path_provider", "shared_preferences", "reactive_forms", "yaml", "isar", "isar_flutter_libs"},
+		Dependencies:    []string{"equatable", "go_router", "flutter_bloc", "json_annotation", "path_provider", "shared_preferences", "reactive_forms", "yaml", "isar", "isar_flutter_libs"},
 		DevDependencies: []string{"build_runner", "json_serializable", "isar_generator"},
 	}, nil
 }

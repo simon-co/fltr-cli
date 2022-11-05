@@ -20,6 +20,7 @@ class _AppSettingsDialogState extends State<AppSettingsDialog> {
       ),
       contentPadding: EdgeInsets.all(16),
       titlePadding: EdgeInsets.all(16),
+      contentPadding: EdgeInsets.all(12),
       children: [
         _SettingsTile("Theme"),
         _ThemeButton()
