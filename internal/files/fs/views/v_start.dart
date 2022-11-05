@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:PROJECT_NAME/src/app/app_error.dart';
 import 'package:PROJECT_NAME/src/app/app_result.dart';
-import 'package:PROJECT_NAME/src/dialogs/d_app_settings.dart';
+import 'package:PROJECT_NAME/src/dialogs/app_settings/d_app_settings.dart';
 
 part 'c_start.dart';
 
@@ -14,7 +14,7 @@ class StartView extends StatefulWidget {
 }
 
 class _StartViewState extends State<StartView> {
-  final ctlr = StartViewController();
+  final ctlr = _StartViewCtlr();
 
   @override
   void initState() {

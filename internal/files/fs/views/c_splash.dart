@@ -1,12 +1,12 @@
 part of 'v_splash.dart';
 
-class SplashViewController {
-  static SplashViewController? _instance;
+class _SplashViewCtlr {
+  static _SplashViewCtlr? _instance;
 
-  SplashViewController._internal();
+  _SplashViewCtlr._internal();
 
-  factory SplashViewController() {
-    _instance ??= SplashViewController._internal();
+  factory _SplashViewCtlr() {
+    _instance ??= _SplashViewCtlr._internal();
     return _instance!;
   }
 

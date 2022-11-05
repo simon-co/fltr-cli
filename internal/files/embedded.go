@@ -10,7 +10,7 @@ var (
 	navP    = "fs/navigation/"
 	utilP   = "fs/util/"
 	viewsP  = "fs/views/"
-	dialogP = "fs/dialog/"
+	dialogP = "fs/dialogs/"
 	stateP  = "fs/state/"
 	modelP  = "fs/models/"
 )
@@ -45,7 +45,7 @@ var EmbeddedFsPaths = struct {
 	AppErrorG:          appP + "app_error.g.dart",
 	AppResult:          appP + "app_result.dart",
 	AppTheme:           appP + "app_theme.dart",
-	AppCalltrace:       appP + "app_trace.dart",
+	AppCalltrace:       appP + "app_calltrace.dart",
 	RootNav:            navP + "n_root.dart",
 	SplashView:         viewsP + "v_splash.dart",
 	SplashCtlr:         viewsP + "c_splash.dart",

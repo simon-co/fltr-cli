@@ -11,6 +11,20 @@ class AppSettingsDialog extends StatefulWidget {
 }
 
 class _AppSettingsDialogState extends State<AppSettingsDialog> {
+  final ctlr = _AppSettingsDialogCtlr();
+
+  @override
+  void initState() {
+    super.initState();
+    ctlr.init();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    ctlr.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return const SimpleDialog(
@@ -20,7 +34,6 @@ class _AppSettingsDialogState extends State<AppSettingsDialog> {
       ),
       contentPadding: EdgeInsets.all(16),
       titlePadding: EdgeInsets.all(16),
-      contentPadding: EdgeInsets.all(12),
       children: [
         _SettingsTile("Theme"),
         _ThemeButton()
