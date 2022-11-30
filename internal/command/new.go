@@ -56,23 +56,27 @@ func (self ProjectBlueprint) New(workingDir string) (*ProjectBlueprint, error) {
 	return &ProjectBlueprint{
 		ProjectName: projectName,
 		ProjectPath: projectPath,
-		Files:       files.FileList{
-      files.Main(projectName),
-      files.App(projectName),
-      files.AppTheme(),
-      files.AppCalltrace(),
-      files.AppResult(projectName),
-      files.AppError(projectName),
-      files.AppErrorG(),
-      files.RootNav(projectName),
-      files.SplashView(projectName),
-      files.SplashCtlr(),
-      files.StartView(projectName),
-      files.StartCtlr(),
-      files.SettingsDialogView(projectName),
-      files.SettingsDialogCtlr(),
-    },
-		Directories: []string{"app", "dialogs", "models", "navigation", "util",
+		Files: files.FileList{
+			files.Main(projectName),
+			files.App(projectName),
+			files.AppConfig(projectName),
+			files.AppTheme(),
+			files.AppCalltrace(),
+			files.AppResult(projectName),
+			files.AppError(projectName),
+			files.AppErrorG(),
+			files.SettingsModel(projectName),
+			files.SettingsModelG(),
+			files.IsarService(projectName),
+			files.RootNav(projectName),
+			files.SplashView(projectName),
+			files.SplashCtlr(),
+			files.StartView(projectName),
+			files.StartCtlr(),
+			files.SettingsDialogView(projectName),
+			files.SettingsDialogCtlr(),
+		},
+		Directories: []string{"app", "dialogs", "models", "navigation", "util", "services",
 			"views" + string(os.PathSeparator) + "splash", "views" + string(os.PathSeparator) + "start", "dialogs" + string(os.PathSeparator) + "app_settings",
 		},
 		Dependencies:    []string{"equatable", "go_router", "flutter_bloc", "json_annotation", "path_provider", "shared_preferences", "reactive_forms", "yaml", "isar", "isar_flutter_libs"},
@@ -84,11 +88,14 @@ func (self *ProjectBlueprint) Instantiate(output io.Writer) error {
 	if err := self.initFlutterProject(output); err != nil {
 		return apperr.Parse(err)
 	}
+	self.createDirectories()
+	if err := self.Files.InstantiateAll(self.ProjectName); err != nil {
+		return apperr.Parse(err)
+	}
 	if err := self.addDependencies(output); err != nil {
 		return apperr.Parse(err)
 	}
-	self.createDirectories()
-	if err := self.Files.InstantiateAll(self.ProjectName); err != nil {
+	if err := self.buildRunner(output); err != nil {
 		return apperr.Parse(err)
 	}
 	return nil
@@ -130,6 +137,17 @@ func (self *ProjectBlueprint) addDependencies(output io.Writer) error {
 		if err := cmd.Run(); err != nil {
 			return apperr.Parse(err)
 		}
+	}
+	return nil
+}
+
+func (self *ProjectBlueprint) buildRunner(output io.Writer) error {
+	cmd := exec.Command("flutter", "pub", "run", "build_runner", "build", "--delete-conflicting-outputs")
+	cmd.Dir = self.ProjectPath
+	cmd.Stdout = output
+	cmd.Stderr = output
+	if err := cmd.Run(); err != nil {
+		return apperr.Parse(err)
 	}
 	return nil
 }

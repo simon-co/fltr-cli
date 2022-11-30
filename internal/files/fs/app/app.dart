@@ -16,8 +16,9 @@ class _AppState extends State<App> {
         valueListenable: AppTheme.notifier,
         builder: (_, mode, __) {
           return MaterialApp.router(
+            debugShowCheckedModeBanner: false,             
             theme: ThemeData.light(),
-            darkTheme: AppTheme.dark(),
+            darkTheme: ThemeData.dark(),
             themeMode: mode,
             routerConfig: RootNav.router,
           );

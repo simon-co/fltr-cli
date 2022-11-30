@@ -95,6 +95,20 @@ func App(projectName string) *File {
 	}
 }
 
+func AppConfig(projectName string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     "app_config.dart",
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "app"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.AppConfig),
+		Replacements: map[string]string{
+			"PROJECT_NAME": projectName,
+		},
+		Mu: sync.Mutex{},
+	}
+}
+
 func AppError(projectName string) *File {
 	return &File{
 		OutputString:       "",
@@ -156,6 +170,46 @@ func AppCalltrace() *File {
 		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.AppCalltrace),
 		Replacements:       map[string]string{},
 		Mu:                 sync.Mutex{},
+	}
+}
+
+func SettingsModel(projectName string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     "m_settings.dart",
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "models"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.SettingsModel),
+		Replacements: map[string]string{
+			"PROJECT_NAME": projectName,
+		},
+		Mu: sync.Mutex{},
+	}
+}
+
+func SettingsModelG() *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     "m_settings.g.dart",
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "models"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.SettingsModelG),
+		Replacements:       map[string]string{},
+		Mu:                 sync.Mutex{},
+	}
+}
+
+func IsarService(projectName string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     "s_isar.dart",
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "services"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.IsarService),
+		Replacements: map[string]string{
+			"PROJECT_NAME": projectName,
+		},
+		Mu: sync.Mutex{},
 	}
 }
 
@@ -225,7 +279,7 @@ func StartCtlr() *File {
 	}
 }
 
-func View(projectName string, dirname string, filename string, classname string, controllerFilename string, root string) *File {
+func View(projectName string, dirname string, filename string, classname string, controllerFilename string, route string) *File {
 	return &File{
 		OutputString:       "",
 		OutputFilename:     filename,
@@ -236,6 +290,7 @@ func View(projectName string, dirname string, filename string, classname string,
 			"PROJECT_NAME":         projectName,
 			"CONTROLLER_FILE_NAME": controllerFilename,
 			"CLASS_NAME":           classname,
+			"ROUTE":                route,
 		},
 		Mu: sync.Mutex{},
 	}
@@ -282,17 +337,17 @@ func SettingsDialogCtlr() *File {
 	}
 }
 
-func Dialog(projectName string, dirname string, filename string, classname string, controllerFilename string, root string) *File {
+func Dialog(projectName string, dirname string, filename string, classname string, controllerFilename string) *File {
 	return &File{
 		OutputString:       "",
 		OutputFilename:     filename,
 		OutputFilePath:     "",
-		outputPathParts:    []string{"lib", "src", "views", dirname},
+		outputPathParts:    []string{"lib", "src", "dialogs", dirname},
 		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.DialogView),
 		Replacements: map[string]string{
-			"PROJECT_NAME":         projectName,
-			"CONTROLLER_FILE_NAME": controllerFilename,
-			"CLASS_NAME":           classname,
+			"PROJECT_NAME":        projectName,
+			"CONTROLLER_FILENAME": controllerFilename,
+			"CLASS_NAME":          classname,
 		},
 		Mu: sync.Mutex{},
 	}
@@ -303,11 +358,11 @@ func DialogCtlr(dirname string, filename string, classname string, dialogFilenam
 		OutputString:       "",
 		OutputFilename:     filename,
 		OutputFilePath:     "",
-		outputPathParts:    []string{"lib", "src", "views", dirname},
+		outputPathParts:    []string{"lib", "src", "dialogs", dirname},
 		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.DialogCtlr),
 		Replacements: map[string]string{
-			"VIEW_FILENAME": dialogFilename,
-			"CLASS_NAME":    classname,
+			"DIALOG_FILENAME": dialogFilename,
+			"CLASS_NAME":      classname,
 		},
 		Mu: sync.Mutex{},
 	}

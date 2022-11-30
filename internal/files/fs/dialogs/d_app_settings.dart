@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:PROJECT_NAME/src/models/m_settings.dart';
 import 'package:PROJECT_NAME/src/app/app_theme.dart';
 
 part 'c_app_settings.dart';
@@ -27,7 +28,7 @@ class _AppSettingsDialogState extends State<AppSettingsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return const SimpleDialog(
+    return SimpleDialog(
       title: Text(
         "Settings",
         textAlign: TextAlign.center,
@@ -61,7 +62,8 @@ class _SettingsTile extends StatelessWidget {
 }
 
 class _ThemeButton extends StatelessWidget {
-  const _ThemeButton({super.key});
+  final ctlr = _AppSettingsDialogCtlr();
+  _ThemeButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +83,7 @@ class _ThemeButton extends StatelessWidget {
               value: ThemeMode.dark,
               child: Text("Dark Theme"),
             )
-          ], value: mode, onChanged: AppTheme.setTheme);
+          ], value: mode, onChanged: ctlr.setThemeMode);
         });
   }
 }

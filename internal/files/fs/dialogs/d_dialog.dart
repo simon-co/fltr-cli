@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:PRJOECT_NAME/src/app/app_theme.dart';
+import 'package:PROJECT_NAME/src/app/app_theme.dart';
 
 part 'CONTROLLER_FILENAME';
 
-class DIALOG_CLASS_NAME extends StatefulWidget {
-  const DIALOG_CLASS_NAME({super.key});
+class CLASS_NAMEDialog extends StatefulWidget {
+  const CLASS_NAMEDialog({super.key});
 
   @override
-  State<DIALOG_CLASS_NAME> createState() => _DIALOG_CLASS_NAMEState();
+  State<CLASS_NAMEDialog> createState() => _CLASS_NAMEDialogState();
 }
 
-class _DIALOG_CLASS_NAMEState extends State<DIALOG_CLASS_NAME> {
-  final ctlr = CONTROLLER_CLASS_NAME();
+class _CLASS_NAMEDialogState extends State<CLASS_NAMEDialog> {
+  final ctlr = _CLASS_NAMEDialogCtlr();
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _DIALOG_CLASS_NAMEState extends State<DIALOG_CLASS_NAME> {
   Widget build(BuildContext context) {
     return const SimpleDialog(
       title: Text(
-        DIALOG_TITLE,
+        "CLASS_NAMEDialog",
         textAlign: TextAlign.center,
       ),
       contentPadding: EdgeInsets.all(16),
@@ -37,3 +37,4 @@ class _DIALOG_CLASS_NAMEState extends State<DIALOG_CLASS_NAME> {
       children: [],
     );
   }
+}

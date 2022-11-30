@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:PROJECT_NAME/src/app/app_error.dart';
 import 'package:PROJECT_NAME/src/app/app_result.dart';
-import 'package:PROJECT_NAME/src/dialogs/d_app_settings.dart';
 
 part 'CONTROLLER_FILE_NAME';
 
 class CLASS_NAMEView extends StatefulWidget {
-  static const route = "VIEW_ROUTE";
-  const VIEW_CLASS_NAME({super.key});
+  static const route = "ROUTE";
+  const CLASS_NAMEView({super.key});
 
   @override
-  State<CLASS_NAMEView> createState() => _VIEW_CLASS_NAMEState();
+  State<CLASS_NAMEView> createState() => _CLASS_NAMEViewState();
 }
 
 class _CLASS_NAMEViewState extends State<CLASS_NAMEView> {

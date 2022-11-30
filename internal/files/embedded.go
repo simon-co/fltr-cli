@@ -6,23 +6,28 @@ import "embed"
 var efs embed.FS
 
 var (
-	appP    = "fs/app/"
-	navP    = "fs/navigation/"
-	utilP   = "fs/util/"
-	viewsP  = "fs/views/"
-	dialogP = "fs/dialogs/"
-	stateP  = "fs/state/"
-	modelP  = "fs/models/"
+	appP      = "fs/app/"
+	navP      = "fs/navigation/"
+	utilP     = "fs/util/"
+	viewsP    = "fs/views/"
+	dialogP   = "fs/dialogs/"
+	stateP    = "fs/state/"
+	modelP    = "fs/models/"
+	servicesP = "fs/services/"
 )
 
 var EmbeddedFsPaths = struct {
 	Main               string
 	App                string
+	AppConfig          string
 	AppError           string
 	AppErrorG          string
 	AppResult          string
 	AppTheme           string
 	AppCalltrace       string
+	SettingsModel      string
+	SettingsModelG     string
+	IsarService        string
 	RootNav            string
 	SplashView         string
 	SplashCtlr         string
@@ -41,11 +46,15 @@ var EmbeddedFsPaths = struct {
 }{
 	Main:               "fs/main.dart",
 	App:                appP + "app.dart",
+	AppConfig:          appP + "app_config.dart",
 	AppError:           appP + "app_error.dart",
 	AppErrorG:          appP + "app_error.g.dart",
 	AppResult:          appP + "app_result.dart",
 	AppTheme:           appP + "app_theme.dart",
 	AppCalltrace:       appP + "app_calltrace.dart",
+	SettingsModel:      modelP + "m_settings.dart",
+	SettingsModelG:     modelP + "m_settings.g.dart",
+	IsarService:        servicesP + "s_isar.dart",
 	RootNav:            navP + "n_root.dart",
 	SplashView:         viewsP + "v_splash.dart",
 	SplashCtlr:         viewsP + "c_splash.dart",
