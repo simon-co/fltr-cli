@@ -31,24 +31,6 @@ class _StartViewState extends State<StartView> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: theme.backgroundColor,
-      appBar: _AppBar.build(context),
-      body: Center(child: Text("Start View")),
-    );
-  }
-}
-
-class _AppBar {
-  static AppBar build(BuildContext context) {
-    final ctlr = _StartViewCtlr();
-    return AppBar(
-      actions: <Widget>[
-        IconButton(
-            onPressed: () => ctlr.openSettings(context),
-            icon: const Icon(Icons.settings))
-      ],
-    );
+    return Center(child: Text("Start View"));
   }
 }
