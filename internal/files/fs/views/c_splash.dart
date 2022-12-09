@@ -19,7 +19,7 @@ class _SplashViewCtlr {
   navigateAfterDelay(BuildContext context, int delay) async {
     Future.delayed(
       Duration(milliseconds: delay),
-      () => context.go(StartView.route)
+      () => context.go(HomeRouteNavigator.route)
     );
   }
 }

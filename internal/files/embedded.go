@@ -7,13 +7,14 @@ var efs embed.FS
 
 var (
 	appP      = "fs/app/"
-	navP      = "fs/navigation/"
+	routingP  = "fs/routing/"
 	utilP     = "fs/util/"
 	viewsP    = "fs/views/"
 	dialogP   = "fs/dialogs/"
 	stateP    = "fs/state/"
 	modelP    = "fs/models/"
 	servicesP = "fs/services/"
+	routeNavP = routingP + "route_navigators/"
 )
 
 var EmbeddedFsPaths = struct {
@@ -28,7 +29,7 @@ var EmbeddedFsPaths = struct {
 	SettingsModel      string
 	SettingsModelG     string
 	IsarService        string
-	RootNav            string
+	Router             string
 	SplashView         string
 	SplashCtlr         string
 	StartView          string
@@ -39,6 +40,9 @@ var EmbeddedFsPaths = struct {
 	SettingsDialogCtlr string
 	DialogView         string
 	DialogCtlr         string
+	HomeNav            string
+	SplashNav          string
+	RouteNav           string
 	// UtilListenable       string
 	// UtilPrimativeWrapper string
 	// CubitState           string
@@ -55,7 +59,7 @@ var EmbeddedFsPaths = struct {
 	SettingsModel:      modelP + "m_settings.dart",
 	SettingsModelG:     modelP + "m_settings.g.dart",
 	IsarService:        servicesP + "s_isar.dart",
-	RootNav:            navP + "n_root.dart",
+	Router:             routingP + "router.dart",
 	SplashView:         viewsP + "v_splash.dart",
 	SplashCtlr:         viewsP + "c_splash.dart",
 	StartView:          viewsP + "v_start.dart",
@@ -66,6 +70,9 @@ var EmbeddedFsPaths = struct {
 	SettingsDialogCtlr: dialogP + "c_app_settings.dart",
 	DialogView:         dialogP + "d_dialog.dart",
 	DialogCtlr:         dialogP + "c_dialog.dart",
+	HomeNav:            routeNavP + "n_home.dart",
+	SplashNav:          routeNavP + "n_splash.dart",
+	RouteNav:           routeNavP + "route_nav.dart",
 	// UtilListenable:       utilP + "u_app_listenable.dart",
 	// UtilPrimativeWrapper: utilP + "u_primative_wrapper.dart",
 	// Cubit:                cubitP + "cubit.dart",

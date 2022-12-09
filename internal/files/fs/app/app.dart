@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:PROJECT_NAME/src/app/app_theme.dart';
-import 'package:PROJECT_NAME/src/navigation/n_root.dart';
+import 'package:PROJECT_NAME/src/routing/router.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -20,7 +20,7 @@ class _AppState extends State<App> {
             theme: ThemeData.light(),
             darkTheme: ThemeData.dark(),
             themeMode: mode,
-            routerConfig: RootNav.router,
+            routerConfig: AppRouter.router,
           );
         });
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:PROJECT_NAME/src/views/start/v_start.dart';
+import 'package:PROJECT_NAME/src/routing/route_navigators/n_home.dart';
 import 'package:go_router/go_router.dart';
 
 part 'c_splash.dart';
 
 class SplashView extends StatefulWidget {
-  static const route = "/splash";
+  static const route = "splash";
   const SplashView({super.key});
 
   @override

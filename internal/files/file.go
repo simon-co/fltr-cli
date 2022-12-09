@@ -213,13 +213,41 @@ func IsarService(projectName string) *File {
 	}
 }
 
-func RootNav(projectName string) *File {
+func Router(projectName string) *File {
 	return &File{
 		OutputString:       "",
-		OutputFilename:     "n_root.dart",
+		OutputFilename:     "router.dart",
 		OutputFilePath:     "",
-		outputPathParts:    []string{"lib", "src", "navigation"},
-		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.RootNav),
+		outputPathParts:    []string{"lib", "src", "routing"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.Router),
+		Replacements: map[string]string{
+			"PROJECT_NAME": projectName,
+		},
+		Mu: sync.Mutex{},
+	}
+}
+
+func SplashNavigator(projectName string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     "n_splash.dart",
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "routing", "route_navigators"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.SplashNav),
+		Replacements: map[string]string{
+			"PROJECT_NAME": projectName,
+		},
+		Mu: sync.Mutex{},
+	}
+}
+
+func HomeNavigator(projectName string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     "n_home.dart",
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "routing", "route_navigators"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.HomeNav),
 		Replacements: map[string]string{
 			"PROJECT_NAME": projectName,
 		},

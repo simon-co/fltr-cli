@@ -5,8 +5,9 @@ import 'package:PROJECT_NAME/src/app/app_result.dart';
 part 'CONTROLLER_FILE_NAME';
 
 class CLASS_NAMEView extends StatefulWidget {
+  const CLASS_NAMEView(this.params, {super.key});
   static const route = "ROUTE";
-  const CLASS_NAMEView({super.key});
+  final Map<String, String> params;
 
   @override
   State<CLASS_NAMEView> createState() => _CLASS_NAMEViewState();

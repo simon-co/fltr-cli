@@ -6,8 +6,9 @@ import 'package:PROJECT_NAME/src/dialogs/app_settings/d_app_settings.dart';
 part 'c_start.dart';
 
 class StartView extends StatefulWidget {
-  static const route = "/start";
-  const StartView({super.key});
+  StartView(this.params, {super.key});
+  static const route = "start";
+  final Map<String, String> params;
 
   @override
   State<StartView> createState() => _StartViewState();
