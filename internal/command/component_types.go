@@ -12,7 +12,8 @@ type ComponentType string
 
 type ComponentTypes struct {
 	View,
-	Dialog ComponentType
+	Dialog,
+  Navigator ComponentType
 }
 
 type ComponentTypeMap map[string]any
