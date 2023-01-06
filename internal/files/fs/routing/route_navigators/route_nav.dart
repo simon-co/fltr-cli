@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:PROJECT_NAME/src/views/VIEW_PATH';
 
-class SplashRouteNavigator extends StatelessWidget {
-  const SplashRouteNavigator({super.key});
+class NAV_CLASSNAME extends StatelessWidget {
+  NAV_CLASSNAME(this.params, {super.key});
   static const route = "ROUTE";
   Map<String, String> params;
   static final navKey = GlobalKey<NavigatorState>();
@@ -12,7 +12,7 @@ class SplashRouteNavigator extends StatelessWidget {
     return Scaffold(
       body: Navigator(
         key: navKey,
-        initialRoute: SplashView.route,
+        initialRoute: VIEW_CLASS_NAME.route,
         onGenerateRoute: (RouteSettings settings) {
           late Widget view;
           switch (settings.name) {

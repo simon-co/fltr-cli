@@ -40,6 +40,8 @@ func (self ComponentType) toBlueprint(output io.Writer) (ComponentBlueprint, err
 		blueprint = ViewBlueprint{}
   case "Dialog":
     blueprint = DialogBlueprint{}
+  case "Navigator":
+    blueprint = NavigatorBlueprint{}
 	default:
 		return nil, errors.New("Invalid component type")
 	}

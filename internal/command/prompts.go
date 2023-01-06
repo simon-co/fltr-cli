@@ -10,9 +10,9 @@ import (
 )
 
 var (
-  ErrClassNameTooShort = errors.New("Supplied class name is too short")
-  ErrClassNameNotPascal = errors.New("Class name must be pascal")
-  ErrClassNameContainsSpace = errors.New("Class name contains space")
+	ErrClassNameTooShort      = errors.New("Supplied class name is too short")
+	ErrClassNameNotPascal     = errors.New("Class name must be pascal")
+	ErrClassNameContainsSpace = errors.New("Class name contains space")
 )
 
 func selectComponent() ComponentType {
@@ -28,20 +28,33 @@ func selectComponent() ComponentType {
 	return ComponentType(res)
 }
 
-func promptClassName() (string, error) {
-  prompt := promptui.Prompt{
-    Label: "Please provide a base class name in Pascal case.",
-    Validate: validateClassName,
-    HideEntered: true,
-  }
-  className, err := prompt.Run()
-  if err != nil {
-    return "", apperr.Parse(err)
-  }
-  return className, nil
+func selectViewname(viewNames any) (int, error) {
+	prompt := promptui.Select{
+		Label:        "Select a default view",
+		Items:        viewNames,
+		HideSelected: true,
+	}
+	i, _, err := prompt.Run()
+	if err != nil {
+		return -1, apperr.Parse(err)
+	}
+	return i, nil
 }
 
-//validates that the provided input is Pascal case
+func promptClassName() (string, error) {
+	prompt := promptui.Prompt{
+		Label:       "Please provide a base class name in Pascal case.",
+		Validate:    validateClassName,
+		HideEntered: true,
+	}
+	className, err := prompt.Run()
+	if err != nil {
+		return "", apperr.Parse(err)
+	}
+	return className, nil
+}
+
+// validates that the provided input is Pascal case
 func validateClassName(input string) error {
 	if len(input) <= 1 {
 		return ErrClassNameTooShort
@@ -52,18 +65,21 @@ func validateClassName(input string) error {
 	if strings.Contains(input, " ") {
 		return ErrClassNameContainsSpace
 	}
+  if strings.ContainsAny(input, "/\\,'?!\"0123456789."){
+    return ErrClassNameNotPascal
+  }
 	return nil
 }
 
-func promptRoute() (string, error){
-  prompt := promptui. Prompt{
-    Label: "What route would you like to use?",
-    HideEntered: true,
-  }
+func promptRoute() (string, error) {
+	prompt := promptui.Prompt{
+		Label:       "What route would you like to use?",
+		HideEntered: true,
+	}
 
-  route, err := prompt.Run()
-  if err != nil {
-    return "", apperr.Parse(err)
-  }
-  return route, nil
+	route, err := prompt.Run()
+	if err != nil {
+		return "", apperr.Parse(err)
+	}
+	return route, nil
 }

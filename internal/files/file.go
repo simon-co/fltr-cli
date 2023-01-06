@@ -396,6 +396,24 @@ func DialogCtlr(dirname string, filename string, classname string, dialogFilenam
 	}
 }
 
+func RouteNavigator(projectName, dirname, filename, classname, route, viewPathName, viewClassName string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     filename,
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "routing", "route_navigators"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.RouteNav),
+		Replacements: map[string]string{
+			"PROJECT_NAME":    projectName,
+			"VIEW_PATH":       viewPathName,
+			"NAV_CLASSNAME":   classname,
+			"ROUTE":           route,
+			"VIEW_CLASS_NAME": viewClassName,
+		},
+		Mu: sync.Mutex{},
+	}
+}
+
 type FileList []*File
 
 func (self FileList) InstantiateAll(projectPath string) error {

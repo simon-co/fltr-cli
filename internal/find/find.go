@@ -9,7 +9,7 @@ import (
 )
 
 var (
-  ErrNotFound = errors.New("can't find entity of supplied name")
+	ErrNotFound = errors.New("can't find entity of supplied name")
 )
 
 // searches the current working directory for an entity matching the supllied entityName.
@@ -34,16 +34,16 @@ func EntityPathBack(entityName string) (string, error) {
 }
 
 func ProjectDir() (string, error) {
-  pubspecYamlPath, err := EntityPathBack("pubspec.yaml")  
-  if err != nil {
-    return "", apperr.Parse(err)
-  }
-  return filepath.Dir(pubspecYamlPath), nil
+	pubspecYamlPath, err := EntityPathBack("pubspec.yaml")
+	if err != nil {
+		return "", apperr.Parse(err)
+	}
+	return filepath.Dir(pubspecYamlPath), nil
 }
 
-//searches for a pubspec.yaml using find.EntityPathBack.  If this file is found
-//returns a path to the fltr views directory in relation to this path.
-//returns find.ErrNotFound if views directory nos found
+// searches for a pubspec.yaml using find.EntityPathBack.  If this file is found
+// returns a path to the fltr views directory in relation to this path.
+// returns find.ErrNotFound if views directory nos found
 func ViewsDirPath() (string, error) {
 	projectPath, err := ProjectDir()
 	if err != nil {
@@ -70,10 +70,43 @@ func DialogsDirPath() (string, error) {
 	return dialogsPath, nil
 }
 
-func ProjectName() (string, error){
+func RouteNavigatorsPath() (string, error) {
 	projectPath, err := ProjectDir()
 	if err != nil {
 		return "", apperr.Parse(err)
 	}
-  return filepath.Base(projectPath), nil
+	navigationpath := filepath.Join(projectPath, "lib", "src", "routing", "route_navigators")
+	_, err = os.Stat(navigationpath)
+	if err != nil {
+		return "", apperr.Parse(ErrNotFound)
+	}
+	return navigationpath, nil
+}
+
+func ProjectName() (string, error) {
+	projectPath, err := ProjectDir()
+	if err != nil {
+		return "", apperr.Parse(err)
+	}
+	return filepath.Base(projectPath), nil
+}
+
+func AllViewDirNames() ([]string, error) {
+	viewsDirPath, err := ViewsDirPath()
+	viewFileNames := []string{}
+	if err != nil {
+		return viewFileNames, apperr.Parse(err)
+	}
+	err = filepath.WalkDir(viewsDirPath, func(path string, entry os.DirEntry, err error) error {
+		if entry.IsDir() {
+			if entry.Name() == "views" {
+				return nil
+			} else {
+				viewFileNames = append(viewFileNames, entry.Name())
+        return filepath.SkipDir
+			}
+		}
+		return nil
+	})
+	return viewFileNames, nil
 }
