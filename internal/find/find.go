@@ -90,6 +90,14 @@ func ProjectName() (string, error) {
 	}
 	return filepath.Base(projectPath), nil
 }
+func RouterPath() (string, error) {
+  projectPath, err := ProjectDir()
+  if err != nil {
+    return "", apperr.Parse(err)
+  }
+  routerPath := filepath.Join(projectPath, "lib", "src", "routing", "router.dart")
+  return routerPath, nil
+}
 
 func AllViewDirNames() ([]string, error) {
 	viewsDirPath, err := ViewsDirPath()

@@ -2,8 +2,11 @@ package command
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"os"
+	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 
@@ -137,8 +140,10 @@ func (self DialogBlueprint) AddToProject(output io.Writer) error {
 }
 
 type NavigatorBlueprint struct {
-	NavigatorDirPath string
-	Files         files.FileList
+	NavigatorDirPath      string
+	Files                 files.FileList
+	routerOutputString    string
+	navigatorImportString string
 }
 
 func (self NavigatorBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
@@ -188,7 +193,7 @@ func (self NavigatorBlueprint) New(output io.Writer) (ComponentBlueprint, error)
 	if err != nil {
 		return nil, apperr.Parse(err)
 	}
-  viewClassname := viewClassNames[i]
+	viewClassname := viewClassNames[i]
 	navigatorDirPath, err := find.RouteNavigatorsPath()
 	if err != nil {
 		return nil, apperr.Parse(err)
@@ -196,17 +201,42 @@ func (self NavigatorBlueprint) New(output io.Writer) (ComponentBlueprint, error)
 
 	viewPathname := viewDirNames[i] + string(os.PathSeparator) + "v_" + viewDirNames[i] + ".dart"
 
-  self.NavigatorDirPath = navigatorDirPath + string(os.PathSeparator) + dirname 
+	self.NavigatorDirPath = navigatorDirPath + string(os.PathSeparator) + dirname
 
-  self.Files = files.FileList{
-    files.RouteNavigator(projectName, dirname, navigatorFilename,string(navClassname), route, viewPathname, string(viewClassname)),
-  }
+	self.Files = files.FileList{
+		files.RouteNavigator(projectName, dirname, navigatorFilename, string(navClassname), route, viewPathname, string(viewClassname)),
+	}
+
+	var sb strings.Builder
+	sb.WriteString("\tGoRoute(\n")
+	sb.WriteString(fmt.Sprintf("\t\t\tname: %s.route,\n", navClassname))
+	sb.WriteString(fmt.Sprintf("\t\t\tpath: %s.route,\n", navClassname))
+	sb.WriteString(fmt.Sprintf("\t\t\tbuilder: (context, state) => %s(state.queryParams)),\n", navClassname))
+	sb.WriteString("]);")
+	self.routerOutputString = sb.String()
+  self.navigatorImportString = filepath.Join(projectName, "src", "routing", "route_navigators", navigatorFilename)
+  self.navigatorImportString = fmt.Sprintf("import 'package:%s';\n", self.navigatorImportString)
 
 	return self, nil
 }
 
 func (self NavigatorBlueprint) AddToProject(output io.Writer) error {
 	projectPath, err := find.ProjectDir()
+	if err != nil {
+		return apperr.Parse(err)
+	}
+	routerPath, err := find.RouterPath()
+	if err != nil {
+		return apperr.Parse(err)
+	}
+	content, err := os.ReadFile(routerPath)
+	if err != nil {
+		return apperr.Parse(err)
+	}
+	regex := regexp.MustCompile(`]\);`)
+	content = []byte(regex.ReplaceAllString(string(content), self.routerOutputString))
+  content = []byte(self.navigatorImportString + string(content))
+	err = os.WriteFile(routerPath, content, 0644)
 	if err != nil {
 		return apperr.Parse(err)
 	}
