@@ -154,9 +154,9 @@ func (self NavigatorBlueprint) New(output io.Writer) (ComponentBlueprint, error)
 
 	var navClassname Classname
 	navClassname, err = navClassname.fromPrompt()
+	dirname := navClassname.toSnakeCase()
 	navClassname = navClassname + "Navigator"
 
-	dirname := navClassname.toSnakeCase()
 	navigatorFilename := "n_" + dirname + ".dart"
 
 	route, err := promptRoute()
