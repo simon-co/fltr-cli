@@ -17,7 +17,7 @@ class NAV_CLASSNAME extends StatelessWidget {
           late Widget view;
           switch (settings.name) {
             case VIEW_CLASS_NAME.route:
-              view = VIEW_CLASS_NAME();
+            view = VIEW_CLASS_NAME(params);
               break;
           }
           return MaterialPageRoute(
