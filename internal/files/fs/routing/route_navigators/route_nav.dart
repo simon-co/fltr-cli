@@ -13,6 +13,7 @@ class NAV_CLASSNAME extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _AppBar.build(context),
       body: Navigator(
         key: navKey,
         initialRoute: VIEW_CLASS_NAME.route,
