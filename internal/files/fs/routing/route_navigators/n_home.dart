@@ -25,8 +25,8 @@ class HomeRouteNavigator extends StatelessWidget {
               break;
           }
           return HomeRouteNavigatorPage(
-            settings: settings,
-            builder: (context) => view,
+              view: view,
+              settings: settings,
           );
         },
       ),
