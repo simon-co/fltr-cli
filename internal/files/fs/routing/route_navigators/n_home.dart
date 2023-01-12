@@ -24,7 +24,7 @@ class HomeRouteNavigator extends StatelessWidget {
               view = StartView(params);
               break;
           }
-          return MaterialPageRoute(
+          return HomeRouteNavigatorPage(
             settings: settings,
             builder: (context) => view,
           );
@@ -32,6 +32,37 @@ class HomeRouteNavigator extends StatelessWidget {
       ),
     );
   }
+}
+
+class HomeRouteNavigatorPage extends PageRouteBuilder {
+  final Widget view;
+  final RouteSettings settings;
+  HomeRouteNavigatorPage({required this.view, required this.settings})
+      : super(
+            settings: settings,
+            pageBuilder: (
+              BuildContext context,
+              Animation animation,
+              Animation secondaryAnimation,
+            ) =>
+                view,
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                          begin: const Offset(0, 0.25), end: Offset.zero)
+                      .animate(animation),
+                  child: SlideTransition(
+                    position:
+                        Tween<Offset>(begin: Offset.zero, end: Offset(0, -1))
+                            .animate(secondaryAnimation),
+                    child: child,
+                  ),
+                ),
+              );
+            });
 }
 
 class _AppBar {

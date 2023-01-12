@@ -24,7 +24,7 @@ class NAV_CLASSNAME extends StatelessWidget {
               view = VIEW_CLASS_NAME(params);
               break;
           }
-          return HomeViewRoute(
+          return NAV_CLASSNAMEPage(
             view: view,
             settings: settings,
           );
@@ -34,10 +34,10 @@ class NAV_CLASSNAME extends StatelessWidget {
   }
 }
 
-class HomeViewRoute extends PageRouteBuilder {
+class NAV_CLASSNAMEPage extends PageRouteBuilder {
   final Widget view;
   final RouteSettings settings;
-  HomeViewRoute({required this.view, required this.settings})
+  NAV_CLASSNAMEPage({required this.view, required this.settings})
       : super(
             settings: settings,
             pageBuilder: (
