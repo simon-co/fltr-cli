@@ -2,6 +2,7 @@ package command
 
 import (
 	"errors"
+	"regexp"
 	"strings"
 	"unicode"
 
@@ -30,9 +31,8 @@ func selectComponent() ComponentType {
 
 func selectViewname(viewNames any) (int, error) {
 	prompt := promptui.Select{
-		Label:        "Select a default view",
-		Items:        viewNames,
-		HideSelected: true,
+		Label: "Select a default view",
+		Items: viewNames,
 	}
 	i, _, err := prompt.Run()
 	if err != nil {
@@ -43,9 +43,8 @@ func selectViewname(viewNames any) (int, error) {
 
 func promptClassName() (string, error) {
 	prompt := promptui.Prompt{
-		Label:       "Please provide a base class name in Pascal case.",
-		Validate:    validateClassName,
-		HideEntered: true,
+		Label:    "Please provide a base class name in Pascal case.",
+		Validate: validateClassName,
 	}
 	className, err := prompt.Run()
 	if err != nil {
@@ -65,16 +64,15 @@ func validateClassName(input string) error {
 	if strings.Contains(input, " ") {
 		return ErrClassNameContainsSpace
 	}
-  if strings.ContainsAny(input, "/\\,'?!\"0123456789."){
-    return ErrClassNameNotPascal
-  }
+	if strings.ContainsAny(input, "/\\,'?!\"0123456789.") {
+		return ErrClassNameNotPascal
+	}
 	return nil
 }
 
 func promptRoute() (string, error) {
 	prompt := promptui.Prompt{
-		Label:       "What route would you like to use?",
-		HideEntered: true,
+		Label: "What route would you like to use?",
 	}
 
 	route, err := prompt.Run()
@@ -83,3 +81,38 @@ func promptRoute() (string, error) {
 	}
 	return route, nil
 }
+
+var ErrInvalidConfirmInput = errors.New("Invaild input: n/no/y/yes accepted.")
+
+// validates that that input is a valid confirm string
+func validateConfirm(input string) error {
+	regex := regexp.MustCompile(`^([nN])+[oO]{0,1}$|^([yY]+(es)*)$`)
+	matches := regex.FindStringSubmatch(input)
+	if matches == nil {
+		return ErrInvalidConfirmInput
+	}
+	return nil
+}
+
+//parses confirm string to bool
+func confirmStrToBool(input string) (bool, error) {
+	regex := regexp.MustCompile(`^([nN])+[oO]{0,1}$|^([yY]+(es)*)$`)
+	matches := regex.FindStringSubmatch(input)
+	if matches == nil {
+		return false,ErrInvalidConfirmInput
+  }
+  return false, nil
+}
+
+// func promptConfirm(label string) (bool, error) {
+//   prompt := promptui.Prompt{
+//   	Label:       label,
+//   	Validate:    validateConfirm,
+//   }
+//   input, err := prompt.Run()
+//   if err != nil {
+//     return false, apperr.Parse(err)
+//   }
+//   c := string(input[0])
+//   if string(input[0]) != "y"{}
+// }
