@@ -45,8 +45,13 @@ type ComponentBlueprint interface {
 }
 
 type ViewBlueprint struct {
-	ViewDirPath string
-	Files       files.FileList
+	ViewDirPath   string
+	ViewDirName   string
+	viewFilename  string
+	viewClassname string
+	Files         files.FileList
+	AddToNav      bool
+	Navigator     *navigatorFile
 }
 
 func (self ViewBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
@@ -61,17 +66,59 @@ func (self ViewBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
 	dirname := classname.toSnakeCase()
 	viewFilename := "v_" + dirname + ".dart"
 	ctlrFilename := "c_" + dirname + ".dart"
+	self.viewFilename = viewFilename
+	self.viewClassname = string(classname) + "View"
 
 	viewsDirPath, err := find.ViewsDirPath()
 	if err != nil {
 		return nil, apperr.Parse(err)
 	}
-
+  self.ViewDirName = dirname
 	self.ViewDirPath = viewsDirPath + string(os.PathSeparator) + dirname
 
 	route, err := promptRoute()
 	if err != nil {
 		return nil, apperr.Parse(err)
+	}
+
+	//add to a navigator
+	ok, err := promptConfirm("Would you like to add the view to an existing navigator?")
+	if err != nil {
+		return nil, apperr.Parse(err)
+	}
+	if ok {
+		nfns, err := find.AllRouteNavigatorPaths()
+		if err != nil {
+			return nil, apperr.Parse(err)
+		}
+		navigators := []*navigatorFile{}
+		var wg sync.WaitGroup
+		var mu sync.Mutex
+		for _, nfn := range nfns {
+			wg.Add(1)
+			go func(nfn string) {
+				defer wg.Done()
+				nf, err := navigatorFile{}.fromPathname(nfn)
+				if err == nil {
+					mu.Lock()
+					defer mu.Unlock()
+					navigators = append(navigators, nf)
+				}
+			}(nfn)
+		}
+		wg.Wait()
+		if len(navigators) > 0 {
+			ncn := make([]string, 0, len(navigators))
+			for _, cn := range navigators {
+				ncn = append(ncn, cn.className)
+			}
+			i, err := selectNavigator(ncn)
+			if err != nil {
+				return nil, apperr.Parse(err)
+			}
+			self.Navigator = navigators[i]
+			self.AddToNav = true
+		}
 	}
 
 	self.Files = files.FileList{
@@ -87,11 +134,44 @@ func (self ViewBlueprint) AddToProject(output io.Writer) error {
 	if err != nil {
 		return apperr.Parse(err)
 	}
+	if self.AddToNav {
+		if err := self.addToNav(); err != nil {
+			return apperr.Parse(err)
+		}
+	}
 	os.MkdirAll(self.ViewDirPath, 0751)
 	if err := self.Files.InstantiateAll(projectPath); err != nil {
 		return apperr.Parse(err)
 	}
 	return nil
+}
+
+func (self ViewBlueprint) addToNav() error {
+  fmt.Println(*self.Navigator)
+	projectName, err := find.ProjectName()
+	if err != nil {
+		return apperr.Parse(err)
+	}
+	navContent, err := os.ReadFile(self.Navigator.path)
+	if err != nil {
+		return apperr.Parse(err)
+	}
+
+  importStr := fmt.Sprintf("import 'package:%s/src/views/%s/%s';\n", projectName, self.ViewDirName, self.viewFilename)
+  navContent = append([]byte(importStr), navContent...) 
+
+	replaceStr := "switch (settings.name) {"
+	var sb strings.Builder
+	sb.WriteString(replaceStr)
+	sb.WriteString(fmt.Sprintf("\n\t\t\t\t\t\tcase %s.route:\n", self.viewClassname))
+	sb.WriteString(fmt.Sprintf("\t\t\t\t\t\t\tview = %s(params);\n", self.viewClassname))
+	sb.WriteString("\t\t\t\t\t\t\tbreak;")
+  navContent = []byte(strings.Replace(string(navContent), replaceStr, sb.String(), 1))
+
+  if err := os.WriteFile(self.Navigator.path, navContent, 0751); err != nil {
+    return apperr.Parse(err)
+  }
+  return nil
 }
 
 type DialogBlueprint struct {
@@ -155,7 +235,7 @@ func (self NavigatorBlueprint) New(output io.Writer) (ComponentBlueprint, error)
 	var navClassname Classname
 	navClassname, err = navClassname.fromPrompt()
 	dirname := navClassname.toSnakeCase()
-	navClassname = navClassname + "Navigator"
+	navClassname = navClassname + "Route" + "Navigator"
 
 	navigatorFilename := "n_" + dirname + ".dart"
 
@@ -214,8 +294,8 @@ func (self NavigatorBlueprint) New(output io.Writer) (ComponentBlueprint, error)
 	sb.WriteString(fmt.Sprintf("\t\t\tbuilder: (context, state) => %s(state.queryParams)),\n", navClassname))
 	sb.WriteString("]);")
 	self.routerOutputString = sb.String()
-  self.navigatorImportString = filepath.Join(projectName, "src", "routing", "route_navigators", navigatorFilename)
-  self.navigatorImportString = fmt.Sprintf("import 'package:%s';\n", self.navigatorImportString)
+	self.navigatorImportString = filepath.Join(projectName, "src", "routing", "route_navigators", navigatorFilename)
+	self.navigatorImportString = fmt.Sprintf("import 'package:%s';\n", self.navigatorImportString)
 
 	return self, nil
 }
@@ -235,7 +315,7 @@ func (self NavigatorBlueprint) AddToProject(output io.Writer) error {
 	}
 	regex := regexp.MustCompile(`]\);`)
 	content = []byte(regex.ReplaceAllString(string(content), self.routerOutputString))
-  content = []byte(self.navigatorImportString + string(content))
+	content = []byte(self.navigatorImportString + string(content))
 	err = os.WriteFile(routerPath, content, 0644)
 	if err != nil {
 		return apperr.Parse(err)
@@ -273,4 +353,44 @@ func (self viewFilename) toClassName() (Classname, error) {
 	classname := strings.Join(split, "")
 	classname = classname + "View"
 	return Classname(classname), nil
+}
+
+type navigatorFile struct {
+	fileName  string
+	className string
+	path      string
+}
+
+var ErrInvalidNavFilePath = errors.New("supplied path is not a valid nav filename")
+
+// returns the filename and classname of the associated file path
+func (self navigatorFile) fromPathname(path string) (*navigatorFile, error) {
+	self.path = path
+	filename := filepath.Base(path)
+	if filename[0] != byte('n') {
+		return nil, apperr.Parse(ErrInvalidNavFilePath)
+	}
+	self.fileName = filename
+	split := strings.Split(filename, ".dart")
+	if len(split) != 2 {
+		return nil, apperr.Parse(ErrInvalidNavFilePath)
+	}
+	split = strings.Split(split[0], "_")
+	if len(split) <= 1 {
+		return nil, apperr.Parse(ErrInvalidNavFilePath)
+	}
+	split = split[1:]
+	for i, word := range split {
+		runes := []rune(word)
+		r := runes[0]
+		upper := []rune(strings.ToUpper(string(r)))
+		capitalised := append(upper, runes[1:]...)
+		split[i] = string(capitalised)
+	}
+	self.className = strings.Join(split, "") + "RouteNavigator"
+	return &self, nil
+}
+
+func (self *navigatorFile) addViewToNavigator(viewFilename string, viewClassname string) error {
+	return nil
 }

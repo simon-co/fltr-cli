@@ -83,6 +83,21 @@ func RouteNavigatorsPath() (string, error) {
 	return navigationpath, nil
 }
 
+func AllRouteNavigatorPaths() ([]string, error) {
+	navigators := []string{}
+	navigatorsPath, err := RouteNavigatorsPath()
+	if err != nil {
+		return nil, apperr.Parse(err)
+	}
+	err = filepath.WalkDir(navigatorsPath, func(path string, entry os.DirEntry, err error) error {
+		if !entry.IsDir() {
+			navigators = append(navigators, navigatorsPath + string(os.PathSeparator) + entry.Name())
+		}
+    return nil
+	})
+	return navigators, nil
+}
+
 func ProjectName() (string, error) {
 	projectPath, err := ProjectDir()
 	if err != nil {
@@ -91,12 +106,12 @@ func ProjectName() (string, error) {
 	return filepath.Base(projectPath), nil
 }
 func RouterPath() (string, error) {
-  projectPath, err := ProjectDir()
-  if err != nil {
-    return "", apperr.Parse(err)
-  }
-  routerPath := filepath.Join(projectPath, "lib", "src", "routing", "router.dart")
-  return routerPath, nil
+	projectPath, err := ProjectDir()
+	if err != nil {
+		return "", apperr.Parse(err)
+	}
+	routerPath := filepath.Join(projectPath, "lib", "src", "routing", "router.dart")
+	return routerPath, nil
 }
 
 func AllViewDirNames() ([]string, error) {
@@ -111,7 +126,7 @@ func AllViewDirNames() ([]string, error) {
 				return nil
 			} else {
 				viewFileNames = append(viewFileNames, entry.Name())
-        return filepath.SkipDir
+				return filepath.SkipDir
 			}
 		}
 		return nil
