@@ -147,7 +147,6 @@ func (self ViewBlueprint) AddToProject(output io.Writer) error {
 }
 
 func (self ViewBlueprint) addToNav() error {
-  fmt.Println(*self.Navigator)
 	projectName, err := find.ProjectName()
 	if err != nil {
 		return apperr.Parse(err)
