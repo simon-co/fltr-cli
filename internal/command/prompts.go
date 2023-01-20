@@ -57,6 +57,7 @@ func promptClassName() (string, error) {
 	prompt := promptui.Prompt{
 		Label:    "Please provide a base class name in Pascal case.",
 		Validate: validateClassName,
+    HideEntered: false,
 	}
 	className, err := prompt.Run()
 	if err != nil {
@@ -84,7 +85,8 @@ func validateClassName(input string) error {
 
 func promptRoute() (string, error) {
 	prompt := promptui.Prompt{
-		Label: "What route would you like to use?",
+		Label:       "What route would you like to use?",
+		HideEntered: false,
 	}
 
 	route, err := prompt.Run()
