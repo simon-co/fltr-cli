@@ -73,7 +73,7 @@ func (self ViewBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
 	if err != nil {
 		return nil, apperr.Parse(err)
 	}
-  self.ViewDirName = dirname
+	self.ViewDirName = dirname
 	self.ViewDirPath = viewsDirPath + string(os.PathSeparator) + dirname
 
 	route, err := promptRoute()
@@ -146,6 +146,28 @@ func (self ViewBlueprint) AddToProject(output io.Writer) error {
 	return nil
 }
 
+var viewNavFuncStr = `
+  static AppError? toVIEW_CLASSNAME() {
+    final navState = navKey.currentState;
+    if (navState != null) {
+      navState.pushReplacementNamed(VIEW_CLASSNAME.route);
+    } else {
+      return AppError(AppErrorCode.e500, "navState is null");
+    }
+    return null;
+  }
+
+  static AppError? pushVIEW_CLASSNAME() {
+    final navState = navKey.currentState;
+    if (navState != null) {
+      navState.pushNamed(VIEW_CLASSNAME.route);
+    } else {
+      return AppError(AppErrorCode.e500, "navState is null");
+    }
+    return null;
+  }
+  static AppError? pop() {`
+
 func (self ViewBlueprint) addToNav() error {
 	projectName, err := find.ProjectName()
 	if err != nil {
@@ -156,8 +178,10 @@ func (self ViewBlueprint) addToNav() error {
 		return apperr.Parse(err)
 	}
 
-  importStr := fmt.Sprintf("import 'package:%s/src/views/%s/%s';\n", projectName, self.ViewDirName, self.viewFilename)
-  navContent = append([]byte(importStr), navContent...) 
+	importStr := fmt.Sprintf("import 'package:%s/src/views/%s/%s';\n", projectName, self.ViewDirName, self.viewFilename)
+	navContent = append([]byte(importStr), navContent...)
+  
+  navContent = self.addNavFuncs(self.viewClassname, navContent)
 
 	replaceStr := "switch (settings.name) {"
 	var sb strings.Builder
@@ -165,12 +189,19 @@ func (self ViewBlueprint) addToNav() error {
 	sb.WriteString(fmt.Sprintf("\n\t\t\t\t\t\tcase %s.route:\n", self.viewClassname))
 	sb.WriteString(fmt.Sprintf("\t\t\t\t\t\t\tview = %s(params);\n", self.viewClassname))
 	sb.WriteString("\t\t\t\t\t\t\tbreak;")
-  navContent = []byte(strings.Replace(string(navContent), replaceStr, sb.String(), 1))
+	navContent = []byte(strings.Replace(string(navContent), replaceStr, sb.String(), 1))
 
-  if err := os.WriteFile(self.Navigator.path, navContent, 0751); err != nil {
-    return apperr.Parse(err)
-  }
-  return nil
+	if err := os.WriteFile(self.Navigator.path, navContent, 0751); err != nil {
+		return apperr.Parse(err)
+	}
+	return nil
+}
+
+// adds nav funcs to the suppliend navigator content and returns updated content
+func (self ViewBlueprint) addNavFuncs(viewClassname string, navContent []byte) []byte {
+  funcsStr := strings.ReplaceAll(viewNavFuncStr,"VIEW_CLASSNAME", viewClassname)
+  navContent = []byte(strings.ReplaceAll(string(navContent),"static AppError? pop() {", funcsStr))
+	return navContent
 }
 
 type DialogBlueprint struct {

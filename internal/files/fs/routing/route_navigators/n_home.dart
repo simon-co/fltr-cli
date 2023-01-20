@@ -32,6 +32,36 @@ class HomeRouteNavigator extends StatelessWidget {
       ),
     );
   }
+  
+  static AppError? toStartView() {
+    final navState = navKey.currentState;
+    if (navState != null) {
+      navState.pushReplacementNamed(StartView.route);
+    } else {
+      return AppError(AppErrorCode.e500, "navState is null");
+    }
+    return null;
+  }
+
+  static AppError? pushStartView() {
+    final navState = navKey.currentState;
+    if (navState != null) {
+      navState.pushNamed(StartView.route);
+    } else {
+      return AppError(AppErrorCode.e500, "navState is null");
+    }
+    return null;
+  }
+
+  static AppError? pop() {
+    final navState = navKey.currentState;
+    if (navState != null && navState.canPop()) {
+      navState.pop();
+      return null;
+    } else {
+      return AppError(AppErrorCode.e500, "navState can't be popped");
+    }
+  }
 }
 
 class HomeRouteNavigatorPage extends PageRouteBuilder {
