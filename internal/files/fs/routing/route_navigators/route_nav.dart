@@ -16,7 +16,7 @@ class NAV_CLASSNAME extends StatelessWidget {
       appBar: _AppBar.build(context),
       body: Navigator(
         key: navKey,
-        initialRoute: VIEW_CLASS_NAME.route,
+        initialRoute: params["view"] ?? VIEW_CLASS_NAME.route,
         onGenerateRoute: (RouteSettings settings) {
           late Widget view;
           switch (settings.name) {
