@@ -220,7 +220,7 @@ func (self DialogBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
 
 	dirname := classname.toSnakeCase()
 	dialogFilename := "d_" + dirname + ".dart"
-	ctlrFilename := "c_" + dirname + ".dart"
+	ctlrFilename := "c_" + dirname + "_dialog" + ".dart"
 
 	dialogsDirPath, err := find.DialogsDirPath()
 	if err != nil {
