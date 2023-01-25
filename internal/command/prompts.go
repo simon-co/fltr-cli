@@ -41,8 +41,8 @@ func selectViewname(viewNames any) (int, error) {
 	return i, nil
 }
 
-func selectNavigator(navigatorNames any) (int, error){
-prompt := promptui.Select{
+func selectNavigator(navigatorNames any) (int, error) {
+	prompt := promptui.Select{
 		Label: "Select navigator",
 		Items: navigatorNames,
 	}
@@ -55,9 +55,9 @@ prompt := promptui.Select{
 
 func promptClassName() (string, error) {
 	prompt := promptui.Prompt{
-		Label:    "Please provide a base class name in Pascal case.",
-		Validate: validateClassName,
-    HideEntered: false,
+		Label:       "Please provide a base class name in Pascal case.",
+		Validate:    validateClassName,
+		HideEntered: false,
 	}
 	className, err := prompt.Run()
 	if err != nil {
@@ -108,28 +108,28 @@ func validateConfirm(input string) error {
 	return nil
 }
 
-//parses confirm string to bool
+// parses confirm string to bool
 func confirmStrToBool(input string) (bool, error) {
-  regex := regexp.MustCompile(`^([nN])+[oO]{0,1}$|^([yY])+(?:es)?$`)
+	regex := regexp.MustCompile(`^([nN])+[oO]{0,1}$|^([yY])+(?:es)?$`)
 	matches := regex.FindStringSubmatch(input)
 	if matches == nil {
-		return false,ErrInvalidConfirmInput
-  }
-  if unicode.ToLower(rune(matches[0][0])) == rune('n'){
-    return false, nil
-  }
-  return true, nil
+		return false, ErrInvalidConfirmInput
+	}
+	if unicode.ToLower(rune(matches[0][0])) == rune('n') {
+		return false, nil
+	}
+	return true, nil
 }
 
-//prompts user for confirmation
+// prompts user for confirmation
 func promptConfirm(label string) (bool, error) {
-  prompt := promptui.Prompt{
-  	Label:       label,
-  	Validate:    validateConfirm,
-  }
-  input, err := prompt.Run()
-  if err != nil {
-    return false, apperr.Parse(err)
-  }
-  return confirmStrToBool(input)
+	prompt := promptui.Prompt{
+		Label:    label,
+		Validate: validateConfirm,
+	}
+	input, err := prompt.Run()
+	if err != nil {
+		return false, apperr.Parse(err)
+	}
+	return confirmStrToBool(input)
 }

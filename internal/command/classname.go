@@ -14,7 +14,7 @@ func (self Classname) fromPrompt() (Classname, error) {
 	prompt := promptui.Prompt{
 		Label:       "Please provide a base class name in Pascal case.",
 		Validate:    validateClassName,
-		HideEntered: true,
+		HideEntered: false,
 	}
 	classname, err := prompt.Run()
 	if err != nil {
