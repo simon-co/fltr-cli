@@ -11,18 +11,18 @@ class CLASS_NAMEDialog extends StatefulWidget {
 }
 
 class _CLASS_NAMEDialogState extends State<CLASS_NAMEDialog> {
-  final ctlr = _CLASS_NAMEDialogCtlr();
+  final ctrl = _CLASS_NAMEDialogCtlr();
 
   @override
   void initState() {
     super.initState();
-    ctlr.init();
+    ctrl.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    ctlr.dispose();
+    ctrl.dispose();
   }
 
   @override

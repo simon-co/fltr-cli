@@ -65,7 +65,7 @@ func (self ViewBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
 
 	dirname := classname.toSnakeCase()
 	viewFilename := "v_" + dirname + ".dart"
-	ctlrFilename := "c_" + dirname + ".dart"
+	ctrlFilename := "c_" + dirname + ".dart"
 	self.viewFilename = viewFilename
 	self.viewClassname = string(classname) + "View"
 
@@ -122,8 +122,8 @@ func (self ViewBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
 	}
 
 	self.Files = files.FileList{
-		files.View(projectName, dirname, viewFilename, string(classname), ctlrFilename, route),
-		files.ViewCtlr(dirname, ctlrFilename, string(classname), viewFilename),
+		files.View(projectName, dirname, viewFilename, string(classname), ctrlFilename, route),
+		files.ViewCtrl(dirname, ctrlFilename, string(classname), viewFilename),
 	}
 
 	return self, nil
@@ -220,7 +220,7 @@ func (self DialogBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
 
 	dirname := classname.toSnakeCase()
 	dialogFilename := "d_" + dirname + ".dart"
-	ctlrFilename := "c_" + dirname + "_dialog" + ".dart"
+	ctrlFilename := "c_" + dirname + "_dialog" + ".dart"
 
 	dialogsDirPath, err := find.DialogsDirPath()
 	if err != nil {
@@ -230,8 +230,8 @@ func (self DialogBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
 	self.DialogsDirPath = dialogsDirPath + string(os.PathSeparator) + dirname
 
 	self.Files = files.FileList{
-		files.Dialog(projectName, dirname, dialogFilename, string(classname), ctlrFilename),
-		files.DialogCtlr(dirname, ctlrFilename, string(classname), dialogFilename),
+		files.Dialog(projectName, dirname, dialogFilename, string(classname), ctrlFilename),
+		files.DialogCtrl(dirname, ctrlFilename, string(classname), dialogFilename),
 	}
 
 	return self, nil

@@ -269,13 +269,13 @@ func SplashView(projectName string) *File {
 	}
 }
 
-func SplashCtlr() *File {
+func SplashCtrl() *File {
 	return &File{
 		OutputString:       "",
 		OutputFilename:     "c_splash.dart",
 		OutputFilePath:     "",
 		outputPathParts:    []string{"lib", "src", "views", "splash"},
-		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.SplashCtlr),
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.SplashCtrl),
 		Replacements:       map[string]string{},
 		Mu:                 sync.Mutex{},
 	}
@@ -295,13 +295,13 @@ func StartView(projectName string) *File {
 	}
 }
 
-func StartCtlr() *File {
+func StartCtrl() *File {
 	return &File{
 		OutputString:       "",
 		OutputFilename:     "c_start.dart",
 		OutputFilePath:     "",
 		outputPathParts:    []string{"lib", "src", "views", "start"},
-		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.StartCtlr),
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.StartCtrl),
 		Replacements:       map[string]string{},
 		Mu:                 sync.Mutex{},
 	}
@@ -324,13 +324,13 @@ func View(projectName string, dirname string, filename string, classname string,
 	}
 }
 
-func ViewCtlr(dirname string, filename string, classname string, viewFilename string) *File {
+func ViewCtrl(dirname string, filename string, classname string, viewFilename string) *File {
 	return &File{
 		OutputString:       "",
 		OutputFilename:     filename,
 		OutputFilePath:     "",
 		outputPathParts:    []string{"lib", "src", "views", dirname},
-		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.ViewCtlr),
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.ViewCtrl),
 		Replacements: map[string]string{
 			"VIEW_FILENAME": viewFilename,
 			"CLASS_NAME":    classname,
@@ -353,13 +353,13 @@ func SettingsDialogView(projectName string) *File {
 	}
 }
 
-func SettingsDialogCtlr() *File {
+func SettingsDialogCtrl() *File {
 	return &File{
 		OutputString:       "",
 		OutputFilename:     "c_app_settings.dart",
 		OutputFilePath:     "",
 		outputPathParts:    []string{"lib", "src", "dialogs", "app_settings"},
-		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.SettingsDialogCtlr),
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.SettingsDialogCtrl),
 		Replacements:       map[string]string{},
 		Mu:                 sync.Mutex{},
 	}
@@ -381,13 +381,13 @@ func Dialog(projectName string, dirname string, filename string, classname strin
 	}
 }
 
-func DialogCtlr(dirname string, filename string, classname string, dialogFilename string) *File {
+func DialogCtrl(dirname string, filename string, classname string, dialogFilename string) *File {
 	return &File{
 		OutputString:       "",
 		OutputFilename:     filename,
 		OutputFilePath:     "",
 		outputPathParts:    []string{"lib", "src", "dialogs", dirname},
-		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.DialogCtlr),
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.DialogCtrl),
 		Replacements: map[string]string{
 			"DIALOG_FILENAME": dialogFilename,
 			"CLASS_NAME":      classname,

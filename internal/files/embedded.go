@@ -31,15 +31,15 @@ var EmbeddedFsPaths = struct {
 	IsarService        string
 	Router             string
 	SplashView         string
-	SplashCtlr         string
+	SplashCtrl         string
 	StartView          string
-	StartCtlr          string
+	StartCtrl          string
 	ViewView           string
-	ViewCtlr           string
+	ViewCtrl           string
 	SettingsDialogView string
-	SettingsDialogCtlr string
+	SettingsDialogCtrl string
 	DialogView         string
-	DialogCtlr         string
+	DialogCtrl         string
 	HomeNav            string
 	SplashNav          string
 	RouteNav           string
@@ -61,15 +61,15 @@ var EmbeddedFsPaths = struct {
 	IsarService:        servicesP + "s_isar.dart",
 	Router:             routingP + "router.dart",
 	SplashView:         viewsP + "v_splash.dart",
-	SplashCtlr:         viewsP + "c_splash.dart",
+	SplashCtrl:         viewsP + "c_splash.dart",
 	StartView:          viewsP + "v_start.dart",
-	StartCtlr:          viewsP + "c_start.dart",
+	StartCtrl:          viewsP + "c_start.dart",
 	ViewView:           viewsP + "v_view.dart",
-	ViewCtlr:           viewsP + "c_view.dart",
+	ViewCtrl:           viewsP + "c_view.dart",
 	SettingsDialogView: dialogP + "d_app_settings.dart",
-	SettingsDialogCtlr: dialogP + "c_app_settings.dart",
+	SettingsDialogCtrl: dialogP + "c_app_settings.dart",
 	DialogView:         dialogP + "d_dialog.dart",
-	DialogCtlr:         dialogP + "c_dialog.dart",
+	DialogCtrl:         dialogP + "c_dialog.dart",
 	HomeNav:            routeNavP + "n_home.dart",
 	SplashNav:          routeNavP + "n_splash.dart",
 	RouteNav:           routeNavP + "route_nav.dart",

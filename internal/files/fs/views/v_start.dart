@@ -15,18 +15,18 @@ class StartView extends StatefulWidget {
 }
 
 class _StartViewState extends State<StartView> {
-  final ctlr = _StartViewCtlr();
+  final ctrl = _StartViewCtlr();
 
   @override
   void initState() {
     super.initState();
-    ctlr.init();
+    ctrl.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    ctlr.dispose();
+    ctrl.dispose();
   }
 
   @override

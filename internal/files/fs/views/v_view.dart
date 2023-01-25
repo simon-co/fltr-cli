@@ -14,18 +14,18 @@ class CLASS_NAMEView extends StatefulWidget {
 }
 
 class _CLASS_NAMEViewState extends State<CLASS_NAMEView> {
-  final ctlr = _CLASS_NAMEViewCtlr();
+  final ctrl = _CLASS_NAMEViewCtlr();
 
   @override
   void initState() {
     super.initState();
-    ctlr.init();
+    ctrl.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    ctlr.dispose();
+    ctrl.dispose();
   }
 
   @override

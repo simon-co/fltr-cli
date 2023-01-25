@@ -12,18 +12,18 @@ class AppSettingsDialog extends StatefulWidget {
 }
 
 class _AppSettingsDialogState extends State<AppSettingsDialog> {
-  final ctlr = _AppSettingsDialogCtlr();
+  final ctrl = _AppSettingsDialogCtlr();
 
   @override
   void initState() {
     super.initState();
-    ctlr.init();
+    ctrl.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    ctlr.dispose();
+    ctrl.dispose();
   }
 
   @override
@@ -62,7 +62,7 @@ class _SettingsTile extends StatelessWidget {
 }
 
 class _ThemeButton extends StatelessWidget {
-  final ctlr = _AppSettingsDialogCtlr();
+  final ctrl = _AppSettingsDialogCtlr();
   _ThemeButton({super.key});
 
   @override
@@ -83,7 +83,7 @@ class _ThemeButton extends StatelessWidget {
               value: ThemeMode.dark,
               child: Text("Dark Theme"),
             )
-          ], value: mode, onChanged: ctlr.setThemeMode);
+          ], value: mode, onChanged: ctrl.setThemeMode);
         });
   }
 }

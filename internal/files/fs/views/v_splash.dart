@@ -13,19 +13,19 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  final ctlr = _SplashViewCtlr();
+  final ctrl = _SplashViewCtlr();
 
   @override
   void initState() {
     super.initState();
-    ctlr.init();
-    ctlr.navigateAfterDelay(context, 750);
+    ctrl.init();
+    ctrl.navigateAfterDelay(context, 750);
   }
 
   @override
   void dispose() {
     super.dispose();
-    ctlr.dispose();
+    ctrl.dispose();
   }
 
   @override
