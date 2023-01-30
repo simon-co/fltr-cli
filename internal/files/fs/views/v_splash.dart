@@ -13,7 +13,7 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  final ctrl = _SplashViewCtlr();
+  final ctrl = _SplashViewCtrl();
 
   @override
   void initState() {

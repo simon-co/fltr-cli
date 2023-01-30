@@ -13,7 +13,8 @@ type ComponentType string
 type ComponentTypes struct {
 	View,
 	Dialog,
-  Navigator ComponentType
+	Navigator,
+	Model ComponentType
 }
 
 type ComponentTypeMap map[string]any
@@ -38,15 +39,17 @@ func (self ComponentType) toBlueprint(output io.Writer) (ComponentBlueprint, err
 	switch self {
 	case "View":
 		blueprint = ViewBlueprint{}
-  case "Dialog":
-    blueprint = DialogBlueprint{}
-  case "Navigator":
-    blueprint = NavigatorBlueprint{}
+	case "Dialog":
+		blueprint = DialogBlueprint{}
+	case "Navigator":
+		blueprint = NavigatorBlueprint{}
+	case "Model":
+		blueprint = ModelBlueprint{}
 	default:
 		return nil, errors.New("Invalid component type")
 	}
 	blueprint, err := blueprint.New(output)
-  if err != nil {
+	if err != nil {
 		return nil, apperr.Parse(err)
 	}
 	return blueprint, nil

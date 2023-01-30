@@ -1,12 +1,12 @@
 part of 'v_start.dart';
 
-class _StartViewCtlr {
-  static _StartViewCtlr? _instance;
+class _StartViewCtrl {
+  static _StartViewCtrl? _instance;
 
-  _StartViewCtlr._internal();
+  _StartViewCtrl._internal();
 
-  factory _StartViewCtlr() {
-    _instance ??= _StartViewCtlr._internal();
+  factory _StartViewCtrl() {
+    _instance ??= _StartViewCtrl._internal();
     return _instance!;
   }
 

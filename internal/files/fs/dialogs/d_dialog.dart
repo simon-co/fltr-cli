@@ -11,7 +11,7 @@ class CLASS_NAMEDialog extends StatefulWidget {
 }
 
 class _CLASS_NAMEDialogState extends State<CLASS_NAMEDialog> {
-  final ctrl = _CLASS_NAMEDialogCtlr();
+  final ctrl = _CLASS_NAMEDialogCtrl();
 
   @override
   void initState() {

@@ -1,12 +1,12 @@
 part of 'd_app_settings.dart';
 
-class _AppSettingsDialogCtlr {
-  static _AppSettingsDialogCtlr? _instance;
+class _AppSettingsDialogCtrl {
+  static _AppSettingsDialogCtrl? _instance;
 
-  _AppSettingsDialogCtlr._internal();
+  _AppSettingsDialogCtrl._internal();
 
-  factory _AppSettingsDialogCtlr() {
-    _instance ??= _AppSettingsDialogCtlr._internal();
+  factory _AppSettingsDialogCtrl() {
+    _instance ??= _AppSettingsDialogCtrl._internal();
     return _instance!;
   }
 

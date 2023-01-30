@@ -15,7 +15,7 @@ class StartView extends StatefulWidget {
 }
 
 class _StartViewState extends State<StartView> {
-  final ctrl = _StartViewCtlr();
+  final ctrl = _StartViewCtrl();
 
   @override
   void initState() {

@@ -12,7 +12,7 @@ class AppSettingsDialog extends StatefulWidget {
 }
 
 class _AppSettingsDialogState extends State<AppSettingsDialog> {
-  final ctrl = _AppSettingsDialogCtlr();
+  final ctrl = _AppSettingsDialogCtrl();
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _SettingsTile extends StatelessWidget {
 }
 
 class _ThemeButton extends StatelessWidget {
-  final ctrl = _AppSettingsDialogCtlr();
+  final ctrl = _AppSettingsDialogCtrl();
   _ThemeButton({super.key});
 
   @override

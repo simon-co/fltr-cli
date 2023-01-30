@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -180,8 +181,8 @@ func (self ViewBlueprint) addToNav() error {
 
 	importStr := fmt.Sprintf("import 'package:%s/src/views/%s/%s';\n", projectName, self.ViewDirName, self.viewFilename)
 	navContent = append([]byte(importStr), navContent...)
-  
-  navContent = self.addNavFuncs(self.viewClassname, navContent)
+
+	navContent = self.addNavFuncs(self.viewClassname, navContent)
 
 	replaceStr := "switch (settings.name) {"
 	var sb strings.Builder
@@ -199,8 +200,8 @@ func (self ViewBlueprint) addToNav() error {
 
 // adds nav funcs to the suppliend navigator content and returns updated content
 func (self ViewBlueprint) addNavFuncs(viewClassname string, navContent []byte) []byte {
-  funcsStr := strings.ReplaceAll(viewNavFuncStr,"VIEW_CLASSNAME", viewClassname)
-  navContent = []byte(strings.ReplaceAll(string(navContent),"static AppError? pop() {", funcsStr))
+	funcsStr := strings.ReplaceAll(viewNavFuncStr, "VIEW_CLASSNAME", viewClassname)
+	navContent = []byte(strings.ReplaceAll(string(navContent), "static AppError? pop() {", funcsStr))
 	return navContent
 }
 
@@ -421,6 +422,80 @@ func (self navigatorFile) fromPathname(path string) (*navigatorFile, error) {
 	return &self, nil
 }
 
-func (self *navigatorFile) addViewToNavigator(viewFilename string, viewClassname string) error {
+type ModelBlueprint struct {
+	ModelFilename string
+	Classname     string
+	Files         files.FileList
+	IsIsar        bool
+}
+
+func (self ModelBlueprint) New(output io.Writer) (ComponentBlueprint, error) {
+	_, err := find.ModelsPath()
+	if err != nil {
+		return nil, apperr.Parse(err)
+	}
+	var classname Classname
+	classname, err = classname.fromPrompt()
+	if err != nil {
+		return nil, apperr.Parse(err)
+	}
+	filename := "m_" + classname.toSnakeCase() + ".dart"
+	isIsar, err := promptConfirm("Is this an Isar model?")
+	if err != nil {
+		return nil, apperr.Parse(err)
+	}
+	if isIsar {
+		self.Classname = string(classname)
+		self.ModelFilename = filename
+		projectName, _ := find.ProjectName()
+		generatedFilename := "m_" + classname.toSnakeCase() + ".g.dart"
+		self.IsIsar = true
+		self.Files = files.FileList{
+			files.IsarModel(filename, projectName, string(classname), generatedFilename),
+		}
+		return self, nil
+	} else {
+		self.Files = files.FileList{
+			files.Model(filename, string(classname)),
+		}
+		return self, nil
+	}
+}
+
+func (self ModelBlueprint) AddToProject(output io.Writer) error {
+	projectPath, err := find.ProjectDir()
+	if err != nil {
+		return apperr.Parse(err)
+	}
+	if err := self.Files.InstantiateAll(projectPath); err != nil {
+		return apperr.Parse(err)
+	}
+	if self.IsIsar {
+		fmt.Println("adding to isar_service")
+		pathToIsarService := filepath.Join(projectPath, "lib", "src", "services", "s_isar.dart")
+		serviceContent, err := os.ReadFile(pathToIsarService)
+		if err != nil {
+			return apperr.Parse(err)
+		}
+		updatedContent := self.AddToIsarServiceString(string(serviceContent))
+		if err := os.WriteFile(pathToIsarService, []byte(updatedContent), 0644); err != nil {
+			return apperr.Parse(err)
+		}
+		fmt.Println("running build runner")
+		cmd := exec.Command("flutter", "pub", "run", "build_runner", "build", "--delete-conflicting-outputs")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if err := cmd.Run(); err != nil {
+			return apperr.Parse(err)
+		}
+	}
 	return nil
+}
+
+func (self ModelBlueprint) AddToIsarServiceString(serviceContent string) string {
+	projectName, _ := find.ProjectName()
+	regex := regexp.MustCompile(`(Isar.open\(\[[\S\s]*)(\]\);)`)
+	updatedContent := regex.ReplaceAllString(serviceContent, "$1, "+self.Classname+"Schema"+"$2")
+	serviceContent = "import 'package:" + projectName + "/src/models/" + self.ModelFilename + "';\n" + updatedContent
+	return serviceContent
 }

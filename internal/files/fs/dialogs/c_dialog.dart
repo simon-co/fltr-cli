@@ -1,12 +1,12 @@
 part of 'DIALOG_FILENAME';
 
-class _CLASS_NAMEDialogCtlr {
-  static _CLASS_NAMEDialogCtlr? _instance;
+class _CLASS_NAMEDialogCtrl {
+  static _CLASS_NAMEDialogCtrl? _instance;
 
-  _CLASS_NAMEDialogCtlr._internal();
+  _CLASS_NAMEDialogCtrl._internal();
 
-  factory _CLASS_NAMEDialogCtlr(){
-    _instance ??= _CLASS_NAMEDialogCtlr._internal();
+  factory _CLASS_NAMEDialogCtrl(){
+    _instance ??= _CLASS_NAMEDialogCtrl._internal();
     return _instance!;
   }
 

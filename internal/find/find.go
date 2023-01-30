@@ -105,6 +105,7 @@ func ProjectName() (string, error) {
 	}
 	return filepath.Base(projectPath), nil
 }
+
 func RouterPath() (string, error) {
 	projectPath, err := ProjectDir()
 	if err != nil {
@@ -112,6 +113,19 @@ func RouterPath() (string, error) {
 	}
 	routerPath := filepath.Join(projectPath, "lib", "src", "routing", "router.dart")
 	return routerPath, nil
+}
+
+func ModelsPath() (string, error) {
+    projectPath, err := ProjectDir()
+    if err != nil {
+        return "", apperr.Parse(err)
+    }
+    modelPath := filepath.Join(projectPath, "lib", "src", "models")
+    if _, err := os.Stat(modelPath); err != nil {
+        return "", apperr.Parse(err)
+    } else {
+        return modelPath, nil
+    }
 }
 
 func AllViewDirNames() ([]string, error) {

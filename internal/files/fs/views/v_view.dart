@@ -14,7 +14,7 @@ class CLASS_NAMEView extends StatefulWidget {
 }
 
 class _CLASS_NAMEViewState extends State<CLASS_NAMEView> {
-  final ctrl = _CLASS_NAMEViewCtlr();
+  final ctrl = _CLASS_NAMEViewCtrl();
 
   @override
   void initState() {

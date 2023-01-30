@@ -414,6 +414,36 @@ func RouteNavigator(projectName, dirname, filename, classname, route, viewPathNa
 	}
 }
 
+func Model(filename, classname string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     filename,
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "models"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.Model),
+		Replacements: map[string]string{
+			"MODEL_CLASSNAME": classname,
+		},
+		Mu: sync.Mutex{},
+	}
+}
+
+func IsarModel(filename, projectName, classname, generatedFilename string) *File {
+	return &File{
+		OutputString:       "",
+		OutputFilename:     filename,
+		OutputFilePath:     "",
+		outputPathParts:    []string{"lib", "src", "models"},
+		EmbeddedFileReader: FileReader{}.New(EmbeddedFsPaths.IsarModel),
+		Replacements:       map[string]string{
+      "PROJECT_NAME": projectName,
+      "GENERATED_FILENAME": generatedFilename,
+      "MODEL_CLASSNAME": classname,
+    },
+		Mu:                 sync.Mutex{},
+	}
+}
+
 type FileList []*File
 
 func (self FileList) InstantiateAll(projectPath string) error {

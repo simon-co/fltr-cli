@@ -1,0 +1,3 @@
+class MODEL_CLASSNAME {
+  
+}

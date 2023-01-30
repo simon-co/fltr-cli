@@ -43,10 +43,11 @@ var EmbeddedFsPaths = struct {
 	HomeNav            string
 	SplashNav          string
 	RouteNav           string
+	Model              string
+	IsarModel          string
 	// UtilListenable       string
 	// UtilPrimativeWrapper string
 	// CubitState           string
-	// Model                string
 }{
 	Main:               "fs/main.dart",
 	App:                appP + "app.dart",
@@ -73,10 +74,11 @@ var EmbeddedFsPaths = struct {
 	HomeNav:            routeNavP + "n_home.dart",
 	SplashNav:          routeNavP + "n_splash.dart",
 	RouteNav:           routeNavP + "route_nav.dart",
+	Model:              modelP + "model.dart",
+	IsarModel:          modelP + "isar_model.dart",
 	// UtilListenable:       utilP + "u_app_listenable.dart",
 	// UtilPrimativeWrapper: utilP + "u_primative_wrapper.dart",
 	// Cubit:                cubitP + "cubit.dart",
 	// CubitState:           cubitP + "state.dart",
 	// Navigator:            navP + "nav.dart",
-	// Model:                modelP + "model.dart",
 }

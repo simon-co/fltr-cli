@@ -248,45 +248,102 @@ func TestNavigatorFileFromPath(t *testing.T) {
 	type testCase struct {
 		name     string
 		input    string
-    expected *navigatorFile
+		expected *navigatorFile
 		error    error
 	}
 	testCases := []testCase{{
 		name:  "success",
 		input: filepath.Join("test", "this", "here", "n_this_test.dart"),
-    expected: &navigatorFile{
+		expected: &navigatorFile{
 			fileName:  "n_this_test.dart",
 			className: "ThisTestRouteNavigator",
 			path:      filepath.Join("test", "this", "here", "n_this_test.dart"),
 		},
 		error: nil,
 	},
-   
-  }
-  var wg sync.WaitGroup
-  for _, tc := range testCases {
-    wg.Add(1)
-    go func(tc testCase){
-      defer wg.Done()
-      t.Run(tc.name, func(t *testing.T) {
-        nf, err := navigatorFile{}.fromPathname(tc.input)
-        if err != nil {
-          if tc.error == nil {
-            t.Errorf("%s Unexpected Error\nExpected: nil\nReceived: %s", tc.name, err)
-            return
-          } 
-          if !errors.Is(err, tc.error){
-            t.Errorf("%s Unexpected Error\nExpected: %s\nReceived: %s", tc.name, tc.error, err)
-            return
-          }
-          return
-        }
-        if *nf != *tc.expected {
-          t.Errorf("%s Unexpected Result\nExpected: %+v\nReceived: %+v", tc.name, tc.expected, nf)
-          return
-        }
-      })
-    }(tc)
-    wg.Wait()
-  }
+	}
+	var wg sync.WaitGroup
+	for _, tc := range testCases {
+		wg.Add(1)
+		go func(tc testCase) {
+			defer wg.Done()
+			t.Run(tc.name, func(t *testing.T) {
+				nf, err := navigatorFile{}.fromPathname(tc.input)
+				if err != nil {
+					if tc.error == nil {
+						t.Errorf("%s Unexpected Error\nExpected: nil\nReceived: %s", tc.name, err)
+						return
+					}
+					if !errors.Is(err, tc.error) {
+						t.Errorf("%s Unexpected Error\nExpected: %s\nReceived: %s", tc.name, tc.error, err)
+						return
+					}
+					return
+				}
+				if *nf != *tc.expected {
+					t.Errorf("%s Unexpected Result\nExpected: %+v\nReceived: %+v", tc.name, tc.expected, nf)
+					return
+				}
+			})
+		}(tc)
+		wg.Wait()
+	}
 }
+
+var isarServiceStr = `import 'dart:io';
+import 'package:app_maker/src/models/m_project.dart';
+import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
+import 'package:app_maker/src/models/m_settings.dart';
+import 'package:path/path.dart' as path;
+
+class IsarService {
+  late Future<Isar> db;
+
+  IsarService() {
+    db = openDB();
+  }
+
+  Future<AppSettings?> getAppSettings() async {
+    final isar = await db;
+    return await isar.appSettings.get(1);
+  }
+
+  Future<void> saveAppSettings(AppSettings settings) async {
+    final isar = await db;
+    await isar.writeTxn(() async {
+      await isar.appSettings.put(settings);
+    });
+  }
+
+  Future<List<Project>> getAllProjects() async {
+    final isar = await db;
+    final projects = await isar.projects.where().findAll();
+    List<Project> existingProjects = [];
+    for (var project in projects) {
+      final fp = path.join(project.path);
+      if (await File(fp).exists()) {
+        existingProjects.add(project);
+      } else {
+        await isar.writeTxn(() async => isar.projects.delete(project.id!));
+      }
+    }
+    return existingProjects;
+  }
+
+  Future<Isar> openDB() async {
+    if (Isar.instanceNames.isEmpty) {
+      return await Isar.open([AppSettingsSchema, ProjectSchema]);
+    } else {
+      return Future.value(Isar.getInstance());
+    }
+  }
+}`
+
+// func TestAddingModelToIsarService(t *testing.T) {
+// 	mb := ModelBlueprint{
+// 		Classname: "TestModelClass",
+// 	}
+// 	response := mb.AddToIsarServiceString(isarServiceStr)
+// 	t.Log(response)
+// }
